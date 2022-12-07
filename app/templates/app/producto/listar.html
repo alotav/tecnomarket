@@ -14,6 +14,7 @@
                 <th>Precio</th>
                 <th>Marca</th>
                 <th>Es nuevo?</th>
+                <th>Opciones</th>
             </tr>
 
             {% for producto in productos %}
@@ -26,6 +27,12 @@
                     {% else %}
                     No
                     {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'editar_productos' producto.id %}" class="btn btn-info btn-sm">Modificar</a>
+                </td>
+                <td>
+                    <a href="{% url 'eliminar_productos' producto.id %}" class="btn btn-danger btn-sm">Eliminar</a>
                 </td>
             </tr>
             {% endfor %}
