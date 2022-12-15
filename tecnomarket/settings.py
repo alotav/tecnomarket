@@ -30,7 +30,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # Para mensajes entre ventanas, activamos el framework de mensajeria de Django:
-MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+# MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
+MESSAGE_STORAGE= "django.contrib.messages.storage.cookie.CookieStorage"
 
 
 

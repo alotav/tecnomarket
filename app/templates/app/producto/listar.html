@@ -1,5 +1,30 @@
 {% extends 'app/base.html' %}
 
+{% block js %}
+<script>
+    function eliminarProducto(id){
+        Swal.fire({
+            "title":"¿Estas Seguro?",
+            "text": "Esta accion no se puede deshacer",
+            "incon": "question",
+            "showCancelButton":true,
+            "cancelButtonText": "No, Cancelar",
+            "confirmButtonText": "Si, Eliminal",
+            "reverseButtons": true,
+            "confirmButtonColor": "#cd3545"
+        })
+        .then(function(result){
+            if(result.isConfirmed){
+                window.location.href = "/eliminar-productos/"+id+"/"
+            }
+        })  
+    }
+</script>
+
+{% endblock %}
+
+
+
 {% block content %}
 {% load humanize %}
 
@@ -17,7 +42,7 @@
                 <th>Opciones</th>
             </tr>
 
-            {% for producto in productos %}
+            {% for producto in entity %}
             <tr>
                 <td>{{ producto.nombre | title }}</td>
                 <td>${{ producto.precio | intcomma }}</td>
@@ -32,11 +57,16 @@
                     <a href="{% url 'editar_productos' producto.id %}" class="btn btn-info btn-sm">Modificar</a>
                 </td>
                 <td>
-                    <a href="{% url 'eliminar_productos' producto.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                    <a href="#" onclick="eliminarProducto({{producto.id}})" class="btn btn-danger btn-sm">Eliminar</a>
+                    <!-- <a href="{% url 'eliminar_productos' producto.id %}" class="btn btn-danger btn-sm">Eliminar</a> -->
                 </td>
             </tr>
             {% endfor %}
         </table>
+        <hr class="mt-5">
+        <div>
+            {% include 'app/paginador.html' %}
+        </div>
     </div>
 </div>
 

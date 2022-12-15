@@ -52,12 +52,6 @@
 
     <div id="contenido">
 
-        <!-- {% if messages %}
-            {% for m in messages %}    
-                {{m}}
-            {% endfor %}
-        {% endif %} -->
-
 
         {% block content %}
 
@@ -89,17 +83,15 @@
     <!-- Agregamos el condicional luego de la importacion del script de SA2 -->
     {% if messages %}
         {% for m in messages %}    
-        <script>
-            Swal.fire({
-                "title":"Felicitaciones",
-                "text":"{{m}}",
-                "icon":"success"
-            })
-        </script>    
+            <script>
+                Swap.fire({
+                    "title":"Felicitaciones",
+                    "text":"{{m}}",
+                    "icon":"success"
+                })
+            </script>
         {% endfor %}
     {% endif %}
-
-
     <!-- Fin alert -->
 
 

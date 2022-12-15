@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, render, get_object_or_404
 from .models import Producto
 from .forms import ContactoForm, ProductoForm
 from django.contrib import messages
+from django.core.paginator import Paginator
+from django.http import Http404
 # Create your views here.
 
 
@@ -47,6 +49,7 @@ def agregar_producto(request):
         formulario = ProductoForm(data=request.POST, files=request.FILES)
         if formulario.is_valid():
             formulario.save()
+            messages.success(request, "Agregado correctamente")
             data['mensaje'] = '*Datos guardados correctamente.'
         else:
             data['form'] = formulario
@@ -56,9 +59,17 @@ def agregar_producto(request):
 
 def listar_productos(request):
     productos = Producto.objects.all()
-    
+    # obtenemos el valor de page a traves de la url, en caso contrario el valor sera 1
+    page = request.GET.get('page', 1)
+    try:
+        paginator = Paginator(productos, 5)
+        productos = paginator.page(page)
+    except:
+        raise Http404
+
     data = {
-        'productos': productos
+        'entity': productos,
+        'paginator': paginator
     }
 
 
