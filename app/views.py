@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, render, get_object_or_404
 from .models import Producto
-from .forms import ContactoForm, ProductoForm
+from .forms import ContactoForm, ProductoForm, CustomUserCreationForm
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.http import Http404
+from django.contrib.auth import authenticate, login
 # Create your views here.
 
 
@@ -101,3 +102,17 @@ def eliminar_productos(request, id):
     producto.delete()
     messages.success(request,'El producto fue eliminado.')
     return redirect(to='listar_productos')
+
+def registro(request):
+    data = {
+        'form': CustomUserCreationForm()
+    }
+    if request.method == 'POST':
+        formulario = CustomUserCreationForm(data=request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            user = authenticate(username=formulario.cleaned_data['username'], password=formulario.cleaned_data['password1'])
+            login(request, user)
+            messages.success(request, "Registrado correctamente, bienvenido!")
+            return redirect(to='home')
+    return render(request, 'registration/registro.html', data)
