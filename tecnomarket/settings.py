@@ -25,8 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
+# Para pruebas face debug en false
+# DEBUG = False 
 DEBUG = True
 
+# Para pruebas face setear allowed hosts, all or local
 ALLOWED_HOSTS = []
 
 # Para mensajes entre ventanas, activamos el framework de mensajeria de Django:
@@ -36,6 +40,16 @@ MESSAGE_STORAGE= "django.contrib.messages.storage.cookie.CookieStorage"
 LOGIN_REDIRECT_URL='/'
 LOGOUT_REDIRECT_URL='/'
 
+
+# Facebook authentication
+#tokens
+
+SOCIAL_AUTH_FACEBOOK_KEY = "1223815938548644"
+SOCIAL_AUTH_FACEBOOK_SECRET = config("SOCIAL_AUTH_FACEBOOK_SECRET")
+
+#excepciones facebook:
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+LOGIN_ERROR_URL = '/error-facebook/'
 
 # Application definition
 
@@ -51,6 +65,8 @@ INSTALLED_APPS = [
     'app.apps.AppConfig',
     'django.contrib.humanize',
     'crispy_forms',
+    'rest_framework',
+    'social_django',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -63,6 +79,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware', #facebook exceptions
 ]
 
 ROOT_URLCONF = 'tecnomarket.urls'
@@ -78,10 +95,34 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends', #Facebook
+                'social_django.context_processors.login_redirect', #Facebook
             ],
         },
     },
 ]
+
+
+#FACEBOOK
+
+#obtener campos adicionales desde facebook
+#con esta configuracion podemos traer el email y la imagen
+
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_link'] 
+
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {  
+  'fields': 'id, name, email, picture.type(large), link'
+}
+
+
+SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [               
+    ('name', 'name'),
+    ('email', 'email'),
+    ('picture', 'picture'),
+    ('link', 'profile_url'),
+]
+
+
 
 WSGI_APPLICATION = 'tecnomarket.wsgi.application'
 
@@ -142,3 +183,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]

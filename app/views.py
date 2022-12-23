@@ -6,8 +6,30 @@ from django.core.paginator import Paginator
 from django.http import Http404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required, permission_required
+
+from .serializers import ProductoSerializer
+from rest_framework import viewsets
 # Create your views here.
 
+
+class ProductoViewset(viewsets.ModelViewSet):        
+    queryset = Producto.objects.all()
+    serializer_class = ProductoSerializer
+
+    # Filtramos datos de la api pasando variable por url: /?nombre_var=nombre
+    def get_queryset(self):
+        productos = Producto.objects.all()
+        
+        nombre = self.request.GET.get('nombre')
+        
+
+        if nombre:
+            # filtramos coincidencias parciales con __contains:
+            productos = productos.filter(nombre__contains=nombre)
+
+        return productos
+
+    
 
 def home(request):
     productos = Producto.objects.all()
@@ -117,3 +139,7 @@ def registro(request):
             messages.success(request, "Registrado correctamente, bienvenido!")
             return redirect(to='home')
     return render(request, 'registration/registro.html', data)
+
+
+def error_facebook(request):
+    return render(request, 'registration/error_facebook.html')
