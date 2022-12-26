@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'rest_framework',
     'social_django',
+    'pwa',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -189,3 +190,26 @@ AUTHENTICATION_BACKENDS = [
     'social_core.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+# PWA
+
+PWA_APP_NAME = "tecnomarket"
+PWA_APP_DESCRIPTION = "Web articulos tecnologicos"
+PWA_APP_THEME_COLOR = "#3477F5"
+PWA_APP_BACKGROUND_COLOR = "#6699f7"
+
+PWA_APP_ICONS = [
+    {
+        "src": "/static/app/img/tecnomarket.png",
+        "sizes": "160x160",
+    } 
+]
+
+PWA_APP_ICONS_APPLE = [
+    {
+        "src": "/static/app/img/tecnomarket.png",
+        "sizes": "160x160",
+    } 
+]
+
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, "serviceworker.js")
