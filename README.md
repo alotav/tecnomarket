@@ -1,2 +1,2 @@
-# tecnomarket
-Tienda virtual de tecnologia
+# Tecnomarket
+Tienda virtual de tecnologia desarrollada en Django.
